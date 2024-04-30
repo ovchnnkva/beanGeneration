@@ -1,4 +1,4 @@
-# javaBeanGenerator-documentation
+# BeanGeneration-documentation
 
 
 
