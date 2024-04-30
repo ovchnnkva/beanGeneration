@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Валидация файла;
+note right
+    Работа лексера,
+    поиск минимум одного элемента,
+    подходящего под декларацию
+end note
+if(Передан файл формата puml) then (true)
+       if (Найден хотя бы один элемент) then (true)
+            :Обработка файла;
+            note left
+               Парсинг файла на элементы,
+               соответствующие декларации
+            end note
+            :Генерация root-элемента бинов;
+            :Сбор yml-файла;
+
+       else (false)
+             label msg_err;
+            #pink:Предупреждение о
+             некорректности
+             файла;
+
+       endif
+else (false)
+    label msg_err2;
+    goto msg_err;
+endif;
+
+
+#palegreen:окончание работы;
+
+@enduml

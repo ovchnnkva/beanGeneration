@@ -1,0 +1,15 @@
+@startuml
+note "Получает путь к puml файлу и разбирает его" as N1
+note "На основе разобранного puml файла собирает yml" as N2
+
+PumlParser...N1
+YmlConverter...N2
+class PumlParser {
+  +List<String> getTokens(String filePath)
+}
+
+class YmlConverter {
+   +void ymlConvert(List<String> tokens)
+
+}
+@enduml

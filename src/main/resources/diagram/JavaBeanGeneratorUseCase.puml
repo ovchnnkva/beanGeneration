@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+(Generate Java-Beans from puml) as Use
+
+User --> (Use)
+
+note bottom of (Use)
+Генерация yml файла с конфигурацией бинов
+на основе разобранного файла формата puml
+end note
+
+@enduml

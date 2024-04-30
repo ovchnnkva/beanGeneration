@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+ANTLR - [PumlParser]
+[YmlConverter] ..> [PumlParser] : use
+[PumlParser] ..> [Folder]
+
+note right of [YmlConverter]
+    принимает разобранный файл от [PumlParser]
+end note
+
+note right of [PumlParser]
+    Использует интерфейс ANTLR для разбора файла
+end note
+database "Folder" {
+    folder "Folder" {
+        [Declaration]
+    }
+}
+@enduml

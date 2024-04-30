@@ -1,0 +1,40 @@
+@startuml
+title Методика расчета биржевых индексов цен топлива для реактивных двигателей в резервуарах ТЗК аэропортов.\n URL: \n VERSION:1 \nREVISION:1
+start
+note right
+  INPUT_DATA:
+  spot_contract
+  **Вопрос по формату обмена, JSON?**
+  
+end note
+
+:ACT_NUM:1
+ACT_DESC:Создать инстанс esia контракта (Бин: EsiaContract -> Таблица: esia_contract **Обсудить вопрос персистенции**)
+ACT_NAME:ESIA_NEW_CTR
+PARAMS:{spot_contract};
+fork
+:ACT_NUM:2
+ACT_DESC:Установка фильтров, все поля с перфиксом f_ (z_epp_limit -> z_epp_limit_history)
+ACT_NAME:ESIA_SET_FLTR
+PARAMS:{EsiaContract};
+end fork
+fork
+:ACT_NUM:3
+ACT_DESC:Установка лимитов
+ACT_NAME:ESIA_SET_LMT
+PARAMS:{EsiaContract};
+end fork
+:ACT_NUM:4
+ACT_DESC: Расчет индиктора
+ACT_NAME:ESIA_CALC_IDR;
+
+:ACT_NUM:5
+ACT_DESC:Расчет диффов
+ACT_NAME:ESIA_CALC_DIF;
+
+:ACT_NUM:6
+ACT_DESC:"Протяжка" в visible public
+ACT_NAME:ESIA_MOV_TO_VIS_PUB;
+
+stop
+@enduml

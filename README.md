@@ -1,45 +1,56 @@
-# My Todo
+# javaBeanGenerator-documentation
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
 
-## Running the application
 
-The project is a standard Maven project. To run it from the command line,
-type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
-http://localhost:8080 in your browser.
+| Имя файла                                           | Тип диаграмы           |
+|-----------------------------------------------------|------------------------|
+| [JavaBeanGeneratorActivity.puml][ActivityDiagram]   | Диаграмма активности   |
+| [JavaBeanGeneratorClass.puml][ClassDiagram]         | Диаграма классов       |
+| [JavaBeanGeneratorComponent.puml][ComponentDiagram] | Диаграма компонентов   |
+| [JavaBeanGeneratorUseCase.puml][UseCaseDiagram]     | Диаграма использования |
 
-You can also import the project to your IDE of choice as you would with any
-Maven project. Read more on [how to import Vaadin projects to different IDEs](https://vaadin.com/docs/latest/guide/step-by-step/importing) (Eclipse, IntelliJ IDEA, NetBeans, and VS Code).
+[ActivityDiagram]: src/main/resources/diagram/JavaBeanGeneratorActivity.puml
+[ClassDiagram]: src/main/resources/diagram/JavaBeanGeneratorClass.puml
+[ComponentDiagram]: src/main/resources/diagram/JavaBeanGeneratorComponent.puml
+[UseCaseDiagram]: src/main/resources/diagram/JavaBeanGeneratorUseCase.puml
 
-## Deploying to Production
+Диаграмы
+=
+Диаграма использования
+-
+![UseCasePng](src/main/resources/diagram/img/JavaBeanGeneratorUseCase.png)
 
-To create a production build, call `mvnw clean package -Pproduction` (Windows),
-or `./mvnw clean package -Pproduction` (Mac & Linux).
-This will build a JAR file with all the dependencies and front-end resources,
-ready to be deployed. The file can be found in the `target` folder after the build completes.
+https://plantuml.com/ru/use-case-diagram
 
-Once the JAR file is built, you can run it using
-`java -jar target/mytodo-1.0-SNAPSHOT.jar`
+Основной задачей API является генерация бизнес-объектов на основе Puml диаграм активности.
 
-## Project structure
+Диаграма активности
+-
+![ActivityPng](src/main/resources/diagram/img/JavaBeanGeneratorActivity.png)
 
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/docs/components/app-layout).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
-- `themes` folder in `frontend/` contains the custom CSS styles.
+https://plantuml.com/ru/activity-diagram-beta\
 
-## Useful links
+Процесс заключается в валидации файла, его разбора в соответствии с декларацией и формирования
+YAML-файла на основе распаршенных элементов puml файла
 
-- Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
-- Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
-- Create new projects at [start.vaadin.com](https://start.vaadin.com/).
-- Search UI components and their usage examples at [vaadin.com/docs/latest/components](https://vaadin.com/docs/latest/components).
-- View use case applications that demonstrate Vaadin capabilities at [vaadin.com/examples-and-demos](https://vaadin.com/examples-and-demos).
-- Build any UI without custom CSS by discovering Vaadin's set of [CSS utility classes](https://vaadin.com/docs/styling/lumo/utility-classes). 
-- Find a collection of solutions to common use cases at [cookbook.vaadin.com](https://cookbook.vaadin.com/).
-- Find add-ons at [vaadin.com/directory](https://vaadin.com/directory).
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
-- Report issues, create pull requests in [GitHub](https://github.com/vaadin).
+Диаграма классов
+-
+![ClassPng](src/main/resources/diagram/img/JavaBeanGeneratorClassDiagram.png)
+https://plantuml.com/ru/class-diagram
+
+В API основную роль играют два класса:
+PumlParser - разбирает файл puml, основываясь на дексларации лексера
+YmlConverter - собирает файл yml конфигурации бинов на основе элементов puml файла
+
+Диаграма Компонетов
+-
+![ComponentPng](src/main/resources/diagram/img/JavaBeanGeneratorComponent.png)
+
+https://plantuml.com/ru/component-diagram
+
+Работа компонента PumlParser зависит от интерфейса ANTLR, который, в свою очередь предоставляет
+функциональность лексера и парсера.
+PumlParser для своего функционирование также использует дс(обычный текстовый файл), читая с него файл декларации
+Работа компонента YmlConverter в свою очередь использует результат работы YmlConverter.
+
+
