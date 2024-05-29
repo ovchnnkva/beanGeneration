@@ -1,9 +1,11 @@
 package ru.sfedu.beanGenerator.views.components;
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.UploadI18N;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
@@ -17,6 +19,10 @@ public class UploadPuml extends Upload {
         super(buffer);
         setStyles();
         addListeners();
+    }
+
+    public void addSucceedFileListener(ComponentEventListener<SucceededEvent> listener) {
+        this.addSucceededListener(listener);
     }
 
     public void addDropFileListener(DomEventListener event) {
@@ -35,7 +41,7 @@ public class UploadPuml extends Upload {
     private void addListeners(){
         this.addFileRejectedListener(e -> {
             Notification notification = Notification.show(WRONG_FILE_TYPE, 5000,
-                    Notification.Position.MIDDLE);
+                    Notification.Position.BOTTOM_END);
             notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         });
     }

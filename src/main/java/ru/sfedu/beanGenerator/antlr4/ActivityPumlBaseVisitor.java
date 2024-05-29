@@ -25,14 +25,14 @@ public class ActivityPumlBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitActivityBase(ActivityPumlParser.ActivityBaseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitActivity(ActivityPumlParser.ActivityContext ctx) { return visitChildren(ctx); }
+	@Override public T visitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -53,7 +53,7 @@ public class ActivityPumlBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAtribute(ActivityPumlParser.AtributeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitActivityBody(ActivityPumlParser.ActivityBodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

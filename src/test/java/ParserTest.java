@@ -3,14 +3,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.sfedu.beanGenerator.antlr4.ActivityPumlLexer;
 import ru.sfedu.beanGenerator.antlr4.ActivityPumlParser;
 import ru.sfedu.beanGenerator.antlr4.DiagramListener;
+import ru.sfedu.beanGenerator.model.Activity;
+import ru.sfedu.beanGenerator.model.ActivityBase;
+import ru.sfedu.beanGenerator.model.ActivityWithCondition;
+import ru.sfedu.beanGenerator.parser.PumlParser;
 import ru.sfedu.beanGenerator.util.ContentFormattingUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public class ParserTest {
+    private static PumlParser parser;
+    @BeforeAll
+    public static void init() {
+        parser = new PumlParser(new DiagramListener());
+    }
 
     @Test
     public void parseSimpleActivityDiagramText() {
@@ -21,62 +38,47 @@ public class ParserTest {
                 "несколькими **строчками** текста;\n" +
                 "stop\n" +
                 "@enduml\n";
-        CharStream strStream = CharStreams.fromString(ContentFormattingUtil.removeLineFeeds(simpleText));
-        ActivityPumlLexer lexer = new ActivityPumlLexer(strStream);
-        ActivityPumlParser parser = new ActivityPumlParser(new CommonTokenStream(lexer));
-        parser.addParseListener(new DiagramListener());
-        parser.activityDiagram();
+        List<Activity> activity = parser.getActivities(simpleText);
+
+        assertEquals(activity.size(), 2);
+        assertTrue(activity.contains(new ActivityBase("act_num_1", "Привет мир!", new HashMap<>())));
+        assertTrue(activity.contains(new ActivityBase("act_num_2", "Эта активность описывается несколькими **строчками** текста", new HashMap<>())));
     }
 
     @Test
     public void parseActivityDiagramWithAtributes() {
         String textWithAtributes =
-        //               "title Методика расчета биржевых индексов цен топлива для реактивных двигателей в резервуарах ТЗК аэропортов. url  version 1 revision 1\n" +
-                "@startuml\n" +
-                "start\n " +
-//                "note right\n" +
-//                " INPUT_DATA:\n" +
-//                " spot_contract\n" +
-//                " **Вопрос по формату обмена, json?**\n" +
-//                "end note\n" +
-                ":ACT_NUM:1\n" +
-                "ACT_DESC:Создать инстанс esia контракта (Бин esiacontract -> Таблица esia_contract **Обсудить вопрос персистенции**)\n" +
-                "ACT_NAME:esia_new_ctr\n" +
-                "PARAMS:{spot_contract};\n" +
-                "fork\n" +
-                ":ACT_NUM:2\n" +
-                "ACT_DESC:Установка фильтров, все поля с перфиксом f_ (z_epp_limit -> z_epp_limit_history)\n" +
-                "ACT_NAME:esia_set_fltr\n" +
-                "PARAMS:{esiacontract};\n" +
-                "end fork\n" +
-                "fork\n" +
-                ":ACT_NUM:3\n" +
-                "ACT_DESC:Установка лимитов\n" +
-                "ACT_NAME:esia_set_lmt\n" +
-                "PARAMS:{esiacontract};\n" +
-                "end fork\n" +
-                ":ACT_NUM:4\n" +
-                "ACT_DESC: Расчет индиктора\n" +
-                "ACT_NAME:esia_calc_idr;\n" +
-                "\n" +
-                "\n" +
-                ":ACT_NUM:5\n" +
-                "ACT_DESC:Расчет диффов\n" +
-                "ACT_NAME:esia_calc_dif;\n" +
-                "\n" +
-                "\n" +
-                ":ACT_NUM:6\n" +
-                "ACT_DESC:\"Протяжка\" в visible public\n" +
-                "ACT_NAME:esia_mov_to_vis_pub;\n" +
-                "\n" +
-                "\n" +
-                "stop\n" +
-                "@enduml";
-        CharStream strStream = CharStreams.fromString(ContentFormattingUtil.removeLineFeeds(textWithAtributes));
-        ActivityPumlLexer lexer = new ActivityPumlLexer(strStream);
-        ActivityPumlParser parser = new ActivityPumlParser(new CommonTokenStream(lexer));
-        parser.addParseListener(new DiagramListener());
-        parser.activityDiagram();
+                """
+                        @startuml
+                        start
+                        :ACT_DESC:Создать инстанс esia контракта
+                        ACT_NAME:esia_new_ctr
+                        PARAMS:{spot_contract};
+                        fork
+                        :ACT_DESC:Установка фильтров
+                        ACT_NAME:esia_set_fltr
+                        PARAMS:{esiacontract};
+                        end fork
+                        fork
+                        :ACT_DESC:Установка лимитов
+                        ACT_NAME:esia_set_lmt
+                        PARAMS:{esiacontract};
+                        end fork
+                        :ACT_DESC:Расчет индиктора
+                        ACT_NAME:esia_calc_idr;
+                        stop
+                        @enduml""";
+        List<Activity> activity = parser.getActivities(textWithAtributes);
+
+        assertEquals(activity.size(), 4);
+        assertTrue(activity.contains(new ActivityBase("act_num_1", "", Map.of("ACT_DESC", "Создать инстанс esia контракта",
+                "PARAMS", "{spot_contract}", "ACT_NAME", "esia_new_ctr"))));
+        assertTrue(activity.contains(new ActivityBase("act_num_2", "", Map.of("ACT_DESC", "Установка фильтров",
+                "PARAMS", "{esiacontract}", "ACT_NAME", "esia_set_fltr"))));
+        assertTrue(activity.contains(new ActivityBase("act_num_3", "", Map.of("ACT_DESC", "Установка лимитов",
+                "PARAMS", "{esiacontract}", "ACT_NAME", "esia_set_lmt"))));
+        assertTrue(activity.contains(new ActivityBase("act_num_4", "", Map.of("ACT_DESC", "Расчет индиктора",
+                "ACT_NAME", "esia_calc_idr"))));
     }
 
     @Test
@@ -89,11 +91,9 @@ public class ParserTest {
                 ":печатаем \"НЕ 5\";\n" +
                 "endif\n" +
                 "@enduml";
-        CharStream strStream = CharStreams.fromString(ContentFormattingUtil.removeLineFeeds(textWithCondition));
-        log.info(ContentFormattingUtil.removeLineFeeds(textWithCondition));
-        ActivityPumlLexer lexer = new ActivityPumlLexer(strStream);
-        ActivityPumlParser parser = new ActivityPumlParser(new CommonTokenStream(lexer));
-        parser.addParseListener(new DiagramListener());
-        parser.activityDiagram();
+        List<Activity> activity = parser.getActivities(textWithCondition);
+
+        assertEquals(activity.size(), 1);
+        assertTrue(activity.contains(new ActivityWithCondition(Map.of("5", "пачатаем 5"), Map.of("else", "печатаем НЕ 5"), "счетчик?", "act_num_1")));
     }
 }

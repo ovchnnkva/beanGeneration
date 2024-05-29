@@ -1,7 +1,10 @@
 package ru.sfedu.beanGenerator.converter;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +16,14 @@ import java.util.stream.Collectors;
 @SpringComponent
 @Slf4j
 public class YmlConverter {
-
     private final ObjectMapper mapper;
 
-    private YmlConverter() {
+    public YmlConverter() {
         mapper = new ObjectMapper(new YAMLFactory());
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
     }
 
-    public List<String> getYamlString(List<Activity> activity) {
+    public String getYamlString(List<Activity> activity) {
         return activity.stream()
                .map(a -> {
                     try {
@@ -30,6 +33,6 @@ public class YmlConverter {
                     }
                     return "";
                })
-               .collect(Collectors.toList());
+               .collect(Collectors.joining());
     }
 }

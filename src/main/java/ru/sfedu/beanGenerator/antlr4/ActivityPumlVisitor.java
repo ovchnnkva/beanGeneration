@@ -17,17 +17,17 @@ public interface ActivityPumlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitActivityDiagram(ActivityPumlParser.ActivityDiagramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ActivityPumlParser#activityBase}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitActivityBase(ActivityPumlParser.ActivityBaseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ActivityPumlParser#activityWithCondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ActivityPumlParser#activity}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitActivity(ActivityPumlParser.ActivityContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ActivityPumlParser#ifCondition}.
 	 * @param ctx the parse tree
@@ -41,11 +41,11 @@ public interface ActivityPumlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElseCondition(ActivityPumlParser.ElseConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ActivityPumlParser#atribute}.
+	 * Visit a parse tree produced by {@link ActivityPumlParser#activityBody}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAtribute(ActivityPumlParser.AtributeContext ctx);
+	T visitActivityBody(ActivityPumlParser.ActivityBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ActivityPumlParser#note}.
 	 * @param ctx the parse tree

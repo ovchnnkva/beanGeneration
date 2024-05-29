@@ -29,6 +29,18 @@ public class ActivityPumlBaseListener implements ActivityPumlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterActivityBase(ActivityPumlParser.ActivityBaseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitActivityBase(ActivityPumlParser.ActivityBaseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -36,18 +48,6 @@ public class ActivityPumlBaseListener implements ActivityPumlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterActivity(ActivityPumlParser.ActivityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitActivity(ActivityPumlParser.ActivityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -77,13 +77,13 @@ public class ActivityPumlBaseListener implements ActivityPumlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtribute(ActivityPumlParser.AtributeContext ctx) { }
+	@Override public void enterActivityBody(ActivityPumlParser.ActivityBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtribute(ActivityPumlParser.AtributeContext ctx) { }
+	@Override public void exitActivityBody(ActivityPumlParser.ActivityBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

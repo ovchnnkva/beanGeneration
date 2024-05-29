@@ -1,15 +1,51 @@
 @startuml
 note "Получает путь к puml файлу и разбирает его" as N1
 note "На основе разобранного puml файла собирает yml" as N2
-
+note "Стандартная активность. \nСодержит только описание.\nМожет быть двух видов: \n С разбиением на атрибуты типа Ключ-Значение(attributes)\n Обычное описание(content)" as N3
+note "Активность с развлетлением. \nПомимо обычного описание \nможет иметь описание для условий if и else " as N4
+note "Класс, отслеживающий парсинг текста. \nКонвертирует найденные парсером токены в сущность Activity \n " as N5
+note "Интерфейс, сгенерированный ANTLR. \nОписывает листенер синтаксического анализа" as N6
 PumlParser...N1
 YmlConverter...N2
-class PumlParser {
-  +List<String> getTokens(String filePath)
+ActivityBase...N3
+ActivityWithCondition...N4
+DiagramListener..N5
+ActivityPumlListener..N6
+PumlParser <.. DiagramListener
+DiagramListener o-- Activity
+
+interface ActivityPumlListener {
+    +void exitActivity(ActivityPumlParser.ActivityContext)
+    +void exitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext)
 }
 
+class DiagramListener implements ActivityPumlListener{
+    activities:List<Activity>
+}
+class PumlParser {
+  +List<Activity> getActivities(String)
+}
+
+interface Activity {
+    +String getName()
+    +String getCondition()
+}
+
+class ActivityBase implements Activity {
+    name: String
+    content: String
+    atributes: Map<String, String>
+}
+
+class ActivityWithCondition implements Activity {
+    name: String
+    condition: String
+    ifCondition: Map<String, String>
+    elseCondition: Map<String, String>
+}
 class YmlConverter {
    +void ymlConvert(List<String> tokens)
-
 }
+
+
 @enduml

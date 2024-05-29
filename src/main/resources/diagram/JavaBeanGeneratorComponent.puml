@@ -1,20 +1,36 @@
 @startuml
 'https://plantuml.com/component-diagram
 
-ANTLR - [PumlParser]
-[YmlConverter] ..> [PumlParser] : use
-[PumlParser] ..> [Folder]
-
-note right of [YmlConverter]
-    принимает разобранный файл от [PumlParser]
-end note
-
-note right of [PumlParser]
-    Использует интерфейс ANTLR для разбора файла
-end note
 database "Folder" {
     folder "Folder" {
-        [Declaration]
-    }
+        [DiagramPng]
+        [YamlConfigFile]
+        [UserPumlFile]
+   }
+   portout FileUtil
 }
+
+[PumlParser]-r-ANTLR
+[YamlConverter]-r-Jackson
+[YamlConverter] ..> [PumlParser] : use
+FileUtil --> [PumlParser]
+[PlantUMLDiagram]-l- plantuml.jar
+PlantUMLDiagram <--> FileUtil
+FileUtil --> [DiagramPng]
+[UserPumlFile] --> FileUtil
+[YamlConverter] --> FileUtil
+FileUtil --> [YamlConfigFile]
+
+note top of [YamlConverter]
+    принимает разобранный файл от PumlParser
+end note
+
+note bottom of [PumlParser]
+    Использует интерфейс ANTLR для разбора файла
+end note
+
+note top of [PlantUMLDiagram]
+    Использует интерфейс plantuml для генерации png
+end note
+
 @enduml

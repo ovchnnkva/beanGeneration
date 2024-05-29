@@ -3,6 +3,8 @@ package ru.sfedu.beanGenerator.model;
 import lombok.*;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * Сущность активности.
@@ -15,12 +17,25 @@ import java.util.Map;
 @Builder
 @ToString
 @AllArgsConstructor
-public class ActivityImpl implements Activity {
+public class ActivityBase implements Activity {
     private String name;
     private String content;
     private Map<String, String> atributes;
 
     public void addAtribute(String name, String value) {
         atributes.put(name, value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ActivityBase that = (ActivityBase) o;
+        return Objects.equals(name, that.name) && Objects.equals(content, that.content) && Objects.equals(atributes, that.atributes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, content, atributes);
     }
 }

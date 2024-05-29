@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import ru.sfedu.beanGenerator.model.Activity;
-import ru.sfedu.beanGenerator.model.ActivityImpl;
+import ru.sfedu.beanGenerator.model.ActivityBase;
 import ru.sfedu.beanGenerator.model.ActivityWithCondition;
 import ru.sfedu.beanGenerator.util.ContentFormattingUtil;
 
@@ -25,14 +25,6 @@ public class DiagramListener implements ActivityPumlListener {
     private List<Activity> activities = new ArrayList<>();
     private static final String NAME_PREFIX = "act_num_";
 
-    @Override
-    public void enterAtribute(ActivityPumlParser.AtributeContext ctx) {
-
-    }
-
-    @Override
-    public void exitAtribute(ActivityPumlParser.AtributeContext ctx) {
-    }
 
     @Override
     public void enterNote(ActivityPumlParser.NoteContext ctx) {
@@ -42,37 +34,6 @@ public class DiagramListener implements ActivityPumlListener {
     @Override
     public void exitNote(ActivityPumlParser.NoteContext ctx) {
 
-    }
-
-    @Override
-    public void enterActivity(ActivityPumlParser.ActivityContext ctx) {
-    }
-
-    @Override
-    public void exitActivity(ActivityPumlParser.ActivityContext ctx) {
-        ActivityPumlParser.AtributeContext atribute = ctx.atribute();
-
-        if(atribute == null) return;
-
-        ActivityImpl activity = ActivityImpl.builder()
-                .name(NAME_PREFIX + (activities.size() + 1))
-                .content((atribute.ATRIBUTE_KEY() == null || atribute.ATRIBUTE_KEY().isEmpty())
-                        ? String.valueOf(ctx.atribute().ATRIBUTE_CONTENT(0).getText())
-                        : "")
-                .atributes(new HashMap<>())
-                .build();
-
-
-        if(ctx.atribute().ATRIBUTE_KEY() != null){
-            for(int i = 0; i < ctx.atribute().ATRIBUTE_KEY().size(); i++) {
-                activity.addAtribute(ContentFormattingUtil.formatActivityKey(String.valueOf(ctx.atribute().ATRIBUTE_KEY(i).getText())),
-                                     String.valueOf(ctx.atribute().ATRIBUTE_CONTENT(i).getText()));
-            }
-        }
-
-        activities.add(activity);
-
-        log.info("find activity bean {}", activity.toString());
     }
 
     @Override
@@ -95,6 +56,16 @@ public class DiagramListener implements ActivityPumlListener {
     }
 
     @Override
+    public void enterActivityBody(ActivityPumlParser.ActivityBodyContext ctx) {
+
+    }
+
+    @Override
+    public void exitActivityBody(ActivityPumlParser.ActivityBodyContext ctx) {
+
+    }
+
+    @Override
     public void enterActivityDiagram(ActivityPumlParser.ActivityDiagramContext ctx) {
 
     }
@@ -102,6 +73,34 @@ public class DiagramListener implements ActivityPumlListener {
     @Override
     public void exitActivityDiagram(ActivityPumlParser.ActivityDiagramContext ctx) {
 
+    }
+
+    @Override
+    public void enterActivityBase(ActivityPumlParser.ActivityBaseContext ctx) {
+
+    }
+
+    @Override
+    public void exitActivityBase(ActivityPumlParser.ActivityBaseContext ctx) {
+        ActivityBase activity = ActivityBase.builder()
+                .name(NAME_PREFIX + (activities.size() + 1))
+                .content((ctx.activityBody().ATRIBUTE_KEY() == null || ctx.activityBody().ATRIBUTE_KEY().isEmpty())
+                        ? String.valueOf(ctx.activityBody().ATRIBUTE_CONTENT(0).getText())
+                        : "")
+                .atributes(new HashMap<>())
+                .build();
+
+
+        if(ctx.activityBody().ATRIBUTE_KEY() != null){
+            for(int i = 0; i < ctx.activityBody().ATRIBUTE_KEY().size(); i++) {
+                activity.addAtribute(ContentFormattingUtil.formatActivityKey(String.valueOf(ctx.activityBody().ATRIBUTE_KEY(i).getText())),
+                        String.valueOf(ctx.activityBody().ATRIBUTE_CONTENT(i).getText()));
+            }
+        }
+
+        activities.add(activity);
+
+        log.info("find activity bean {}", activity.toString());
     }
 
     @Override
@@ -116,9 +115,9 @@ public class DiagramListener implements ActivityPumlListener {
 
         activityWithCondition.setCondition(ContentFormattingUtil.formatCondition(ctx.ifCondition().BRANCH_VAL(0).toString()));
 
-        if(ifCondition.atribute() != null) {
+        if(ifCondition.activityBody() != null) {
             activityWithCondition.setIfCondition(Map.of(ContentFormattingUtil.formatActivityKey(ifCondition.BRANCH_VAL(1).getText()),
-                    ContentFormattingUtil.formatCondition(ifCondition.atribute().ATRIBUTE_CONTENT().get(0).getText())));
+                    ContentFormattingUtil.formatCondition(ifCondition.activityBody().ATRIBUTE_CONTENT().get(0).getText())));
 
             Map<String, String> elseConditions = new HashMap<>();
 
@@ -127,7 +126,7 @@ public class DiagramListener implements ActivityPumlListener {
                             ? ContentFormattingUtil.formatActivityKey(c.BRANCH_VAL().getText())
                             : "else",
 
-                    ContentFormattingUtil.formatCondition(c.atribute().ATRIBUTE_CONTENT().get(0).getText())
+                    ContentFormattingUtil.formatCondition(c.activityBody().ATRIBUTE_CONTENT().get(0).getText())
             ));
 
             activityWithCondition.setElseCondition(elseConditions);

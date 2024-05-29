@@ -18,6 +18,16 @@ public interface ActivityPumlListener extends ParseTreeListener {
 	 */
 	void exitActivityDiagram(ActivityPumlParser.ActivityDiagramContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ActivityPumlParser#activityBase}.
+	 * @param ctx the parse tree
+	 */
+	void enterActivityBase(ActivityPumlParser.ActivityBaseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ActivityPumlParser#activityBase}.
+	 * @param ctx the parse tree
+	 */
+	void exitActivityBase(ActivityPumlParser.ActivityBaseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ActivityPumlParser#activityWithCondition}.
 	 * @param ctx the parse tree
 	 */
@@ -27,16 +37,6 @@ public interface ActivityPumlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitActivityWithCondition(ActivityPumlParser.ActivityWithConditionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ActivityPumlParser#activity}.
-	 * @param ctx the parse tree
-	 */
-	void enterActivity(ActivityPumlParser.ActivityContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ActivityPumlParser#activity}.
-	 * @param ctx the parse tree
-	 */
-	void exitActivity(ActivityPumlParser.ActivityContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ActivityPumlParser#ifCondition}.
 	 * @param ctx the parse tree
@@ -58,15 +58,15 @@ public interface ActivityPumlListener extends ParseTreeListener {
 	 */
 	void exitElseCondition(ActivityPumlParser.ElseConditionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ActivityPumlParser#atribute}.
+	 * Enter a parse tree produced by {@link ActivityPumlParser#activityBody}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtribute(ActivityPumlParser.AtributeContext ctx);
+	void enterActivityBody(ActivityPumlParser.ActivityBodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ActivityPumlParser#atribute}.
+	 * Exit a parse tree produced by {@link ActivityPumlParser#activityBody}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtribute(ActivityPumlParser.AtributeContext ctx);
+	void exitActivityBody(ActivityPumlParser.ActivityBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ActivityPumlParser#note}.
 	 * @param ctx the parse tree

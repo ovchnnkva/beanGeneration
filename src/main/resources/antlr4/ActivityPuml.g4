@@ -4,34 +4,39 @@ activityDiagram         :   title?
                             START?
                             note*
                             activityWithCondition*
-                            activity*
+                            activityBase*
                             END?
                             END_UML;
+
+activityBase            :   FORK_START?
+                            activityBody
+                            FORK_END?;
 
 activityWithCondition   :   ifCondition
                             elseCondition*
                             ENDIF;
 
-activity                :   FORK_START?
-                            atribute
-                            FORK_END?;
-
-ifCondition             :   'if ' BRANCH_VAL (' is ' BRANCH_VAL)? ' then'
-                                atribute;
+ifCondition             :   IF BRANCH_VAL (' is ' BRANCH_VAL)? ' then'
+                                activityBody;
 elseCondition           :   ELSE BRANCH_VAL?
-                                atribute;
+                                activityBody;
 
-atribute                :   ATRIBUTE_START
+activityBody            :   ATRIBUTE_START
                             (ATRIBUTE_KEY? ATRIBUTE_CONTENT)+
                             ATRIBUTE_END;
+
 
 note                    :   NOTE_START
                             ATRIBUTE_CONTENT
                             NOTE_END;
 
-title                   :   'title' ATRIBUTE_CONTENT;
+title                   :   TITLE ATRIBUTE_CONTENT;
 
+TITLE                   :   'title ';
 ELSE                    :   'else';
+IF                      :   'if ';
+IS                      :   ' is ';
+THEN                    :   ' then ';
 ENDIF                   :   'endif';
 BRACKET                 :   [()];
 START_UML               :   '@startuml';

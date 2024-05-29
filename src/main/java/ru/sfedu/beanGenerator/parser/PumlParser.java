@@ -22,8 +22,8 @@ public class PumlParser {
 
     private final DiagramListener listener;
 
-    public List<Activity> getActivities(String inputStr) {
-        startParsing(inputStr);
+    public List<Activity> getActivities(String inputDiagramDesc) {
+        startParsing(inputDiagramDesc);
 
         return listener.getActivities();
     }

@@ -35,7 +35,7 @@ YAML-файла на основе распаршенных элементов pu
 
 Диаграма классов
 -
-![ClassPng](src/main/resources/diagram/img/JavaBeanGeneratorClassDiagram.png)
+![ClassPng](src/main/resources/diagram/img/JavaBeanGeneratorClass.png)
 https://plantuml.com/ru/class-diagram
 
 В API основную роль играют два класса:

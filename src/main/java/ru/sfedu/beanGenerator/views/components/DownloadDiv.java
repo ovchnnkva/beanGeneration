@@ -11,7 +11,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static ru.sfedu.beanGenerator.util.FileUtil.FILE_PATH;
+import static ru.sfedu.beanGenerator.constants.PathConstant.FILE_PATH_FORMAT;
+import static ru.sfedu.beanGenerator.util.FileUtil.deleteFile;
+
 
 @SpringComponent
 @Slf4j
@@ -34,12 +36,6 @@ public class DownloadDiv extends Div {
     }
 
     public void clear() {
-        Path path = Path.of(String.format(FILE_PATH, fileName));
-        try{
-            Files.delete(path);
-        } catch (IOException e) {
-            log.error("file delete error " + e.getLocalizedMessage());
-        }
         this.removeAll();
     }
 
